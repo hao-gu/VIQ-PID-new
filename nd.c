@@ -42,7 +42,6 @@ void drive(double target)
     rderivative=rerror-rprevError;
     lprevError=lerror;
     rprevError=rerror;
-	  
     terror = angle-getGyroHeadingFloat(gyro);
     if (terror > 180){
     	terror = terror - 360;
@@ -50,7 +49,6 @@ void drive(double target)
     else if (terror < -180){
 	terror = terror + 360;
     }
-	  
     setMotorSpeed(Left,error*kp+lderivative*kd-terror*gp);
     setMotorSpeed(Right,error*kp+rderivative*kd-terror*gp);
   }
