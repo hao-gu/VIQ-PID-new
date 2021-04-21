@@ -3,16 +3,12 @@ double kd;
 //integral not useful
 double dp; //accounting for drift with encoder values
 double gp; //accounting for drift with a gyro
+
 //Universal variables
-double lerror;
-double rerror;
+double error;
 double terror;
-
-double lPrevError;
-double rPrevError;
-
-double lderivative;
-double rderivative;
+double PrevError;
+double derivative;
 
 void setconstants(double p,double d,double df,double g)//makes tuning easier in the main document
 {
@@ -21,37 +17,42 @@ void setconstants(double p,double d,double df,double g)//makes tuning easier in 
   dp=df;
   gp=g;
 }
-double drift(double l,double r)
+double drift(double l,double r) //drift correction with encoders. still working on this
 {
   return (l-r)*dp;
 }
-void drive(double target)
+void drive(double target, double heading)
 {
   resetMotorEncoder(right);
-	resetMotorEncoder(left);
-  lerror=target;
-  rerror=target;
-  lPrevError=lerror;
-  rPrevError=rerror;
-  while(abs(lerror)>2||abs(lderivative)>1)
+  resetMotorEncoder(left);
+  error=target;
+  PrevError=error;
+  while(abs(error)>2||abs(derivative)>1)
   {
     sleep(20);
-    lerror=target-getMotorEncoder(Left);
-    rerror=target-getMotorEncoder(Right);
-    lderivative=lerror-lprevError;
-    rderivative=rerror-rprevError;
-    lprevError=lerror;
-    rprevError=rerror;
-    terror = angle-getGyroHeadingFloat(gyro);
+    error=target-(getMotorEncoder(Left)+getMotorEncoder(Right))/2;
+    derivative=error-prevError;
+    prevError=error;
+    terror = heading-getGyroHeadingFloat(gyro);
     if (terror > 180){
     	terror = terror - 360;
     }
     else if (terror < -180){
 	terror = terror + 360;
     }
-    setMotorSpeed(Left,error*kp+lderivative*kd-terror*gp);
-    setMotorSpeed(Right,error*kp+rderivative*kd-terror*gp);
+    setMotorSpeed(Left,error*kp+derivative*kd-terror*gp);
+    setMotorSpeed(Right,error*kp+derivative*kd+terror*gp);
   }
   stopMotor(Left);
   stopMotor(Right);
 }
+
+
+
+
+
+
+
+
+
+//
