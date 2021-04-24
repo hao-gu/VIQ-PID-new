@@ -34,12 +34,8 @@ void drive(double target, double heading)
     derivative=error-prevError;
     prevError=error;
     terror = heading-getGyroHeadingFloat(gyro);
-    if (terror > 180){
-    	terror = terror - 360;
-    }
-    else if (terror < -180){
-	terror = terror + 360;
-    }
+    if (terror > 180){terror = terror - 360;}
+    else if (terror < -180){terror = terror + 360;}
     setMotorSpeed(Left,error*kp+derivative*kd-terror*gp);
     setMotorSpeed(Right,error*kp+derivative*kd+terror*gp);
   }
