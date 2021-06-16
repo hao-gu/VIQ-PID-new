@@ -9,6 +9,9 @@ double error;
 double terror;
 double PrevError;
 double derivative;
+double power;
+double tlasterror;
+double tderivative;
 
 void setconstants(double p,double d,double df,double g)//makes tuning easier in the main document
 {
@@ -43,7 +46,7 @@ void drive(double target, double heading)
   stopMotor(Right);
 }
 
-void Turn(double heading)
+void Turn(double target)
 {
 	terror = target - getGyroHeading(gyro);
 	tlasterror = terror;
