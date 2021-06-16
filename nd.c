@@ -45,11 +45,30 @@ void drive(double target, double heading)
 
 void Turn(double heading)
 {
-		
+	terror = target - getGyroHeading(gyro);
+	tlasterror = terror;
+
+	while(abs(terror) > 1.0||abs(terror-tlasterror)>0.2){
+		terror = target - getGyroHeading(gyro);
+		if (terror > 180){
+			terror = terror - 360;
+		}
+		else if (terror < -180){
+			terror = terror + 360;
+		}
+		tderivative = td * (terror - tlastError);
+		tlastError = terror;
+		if(terror == 0){tderivative = 0;}
+		power = tp * terror + td * tderivative;
+		setMotorSpeed(left,power*-1);
+		setMotorSpeed(right,power*1);
+		wait1Msec(20);
+
+	}	
 }
 
 
-
+//identations offff i dont wanna fix it
 
 
 
