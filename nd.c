@@ -20,7 +20,7 @@ void setconstants(double p,double d,double df,double g)//makes tuning easier in 
   dp=df;
   gp=g;
 }
-double drift(double l,double r) //drift correction with encoders. still working on this
+double drift(double l,double r) //drift correction with encoders. still working on this. will finish in probably never
 {
   return (l-r)*dp;
 }
@@ -46,7 +46,7 @@ void drive(double target, double heading)
   stopMotor(Right);
 }
 
-void Turn(double target)
+void Turn(double target) //This is absolute angle, not relative angle.
 {
 	terror = target - getGyroHeading(gyro);
 	tlasterror = terror;
